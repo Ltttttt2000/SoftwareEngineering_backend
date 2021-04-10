@@ -1,0 +1,3 @@
+module GymProject {
+	requires javacsv;
+}
