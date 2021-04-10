@@ -7,8 +7,7 @@ import java.util.ArrayList;
 
 
 public class Client extends User{
-
-	protected int rechargeAmount;      //the total money in the account
+	
               // Normal, Member, SupremeMember
 	public Client(String userid) {
 		super(userid);

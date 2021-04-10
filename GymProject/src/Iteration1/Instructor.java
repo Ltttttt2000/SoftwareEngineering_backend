@@ -3,20 +3,15 @@
  */
 package Iteration1;
 
-/**
- * @author DongWanqi
- *
- */
+import java.util.ArrayList;
 
 public class Instructor extends User{
-	
+	  
 	 public Instructor(String userid) {
 		super(userid);
-		// TODO Auto-generated constructor stub
+		
 	}
 	 
-	String resume;
-	
 	 void setResume(String resume) {
 		 this.resume = resume;
 	 }
@@ -35,15 +30,20 @@ public class Instructor extends User{
 	 }
 	 void editVideo(Video video) {
 		 
+		 
 	 }
 
 	 ArrayList<Client> listMySupremeMember(){
+		return null;
 		 
 	 }
+	 
 	 ArrayList<Video> listMyVideo(){
+		return null;
 		 
 	 }
-	 void checkMyMember(client member) {
-		 
+	 
+	 void checkMyMember(Client member) {
+		 member.getUserPhysicalInfo().printUserPhisical();
 	 }
 }

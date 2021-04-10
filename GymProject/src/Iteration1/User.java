@@ -19,16 +19,12 @@ public class User{
 	String sex;
 	String phoneNumber;
 	Boolean loginLicense;
+	int rechargeAmount = 0;      //the total money in the account
+	String resume;  //for instructor
 	
 	//需不需要new?
 	String[] fileHeaders = new String[10];
 	
-	fileHeaders[0] = "userid";
-	fileHeaders[1] = "password";
-	fileHeaders[2] = "userType";
-	fileHeaders[3] = "sex";
-	fileHeaders[4] = "phoneNumber";
-	fileHeaders[5] = "loginLicense";
 	//注意这里是List!!而FileUtils 里面返回的都是以String[] 为元素的list，读的是文件的行，每一行是一个String[]
 	ArrayList<String[]> userInfoList = new ArrayList<String[]>();
 	
@@ -42,6 +38,17 @@ public class User{
 	public User(String userid){
 		this.userid = userid;
 		userInfo[0] = this.userid;
+		
+		fileHeaders[0] = "userid";
+		fileHeaders[1] = "password";
+		fileHeaders[2] = "userType";
+		fileHeaders[3] = "sex";
+		fileHeaders[4] = "phoneNumber";
+		fileHeaders[5] = "loginLicense";
+		fileHeaders[6] = "rechargeAmount";
+		fileHeaders[7] = "resume";
+		
+		
 		File check = new File("./"+ this.getClass().getName() + "/"+userid +".csv");
 		if(!check.exists()) {
 			FileUtils.createCSV("./"+ this.getClass().getName() + "/"+userid +".csv", fileHeaders);
@@ -59,6 +66,11 @@ public class User{
 			userInfo[4] = this.phoneNumber;
 			this.loginLicense = Boolean.valueOf(selectList.get(0)[5]);
 			userInfo[5] = String.valueOf(this.loginLicense);
+			this.rechargeAmount = Integer.parseInt(selectList.get(0)[6]);
+			userInfo[6] = String.valueOf(this.rechargeAmount);
+			this.resume = selectList.get(0)[7];
+			userInfo[7] = this.resume;
+			
 		}
 	}
 
@@ -98,7 +110,7 @@ public class User{
 		 
 	 }
 	 
-	 //	TODO !!!
+	 //	TODO !!! 感觉应该删掉，直接通过getUserPhysicalInfo new 一个physicalInfo，调用里面的get set 就可以
 	 void setPhysicalInfo(PhysicalInfo physicalInfo) {
 		 
 	 }

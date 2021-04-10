@@ -11,6 +11,7 @@ import java.util.ArrayList;
  *
  */
 public class PhysicalInfo {
+	String userId;
 	int age;
 	double height; 
 	double weight;
@@ -27,9 +28,10 @@ public class PhysicalInfo {
 	String[] readAll = {"*"}; // 为了给readCSV传入一个读全部的 *
 	
 	public PhysicalInfo(String userid) {
+		this.userId = userid;
 		File check = new File("./"+ this.getClass().getName() + "/"+userid +".csv");
 		if(!check.exists()) {
-			FileUtils.createCSV("./"+ this.getClass().getName() + "/"+userid +".csv", fileHeaders);
+			FileUtils.createCSV("./"+ this.getClass().getName() + "/"+userid +".csv", physicalInfoHeaders);
 		}
 		else {
 			selectList = FileUtils.readCSV("./"+ this.getClass().getName() + "/"+userid+".csv", readAll);
@@ -104,6 +106,25 @@ public class PhysicalInfo {
 	 void setHip(double hip) {
 		 this.hip = hip;
 		 userPhysical[6] = Double.toString(this.hip);
+	 }
+	 
+	 void printUserPhisical() {
+		 System.out.println("age:"+ this.age +"\n"+
+				 			"height"+ this.age +"\n"+
+				 			"weight"+ this.age +"\n"+
+				 			"chest"+ this.age +"\n"+
+				 			"waist"+ this.age +"\n"+
+				 			"hip"+ this.age +"\n");
+	 }
+	 
+	 void renewUserPhysical() {
+		 //删文件
+		 FileUtils.delete("./"+ this.getClass().getName() + "/"+ this.userId +".csv");
+		 userPhysicalList.add(userPhysical);
+		 //重新建一个文件
+		 FileUtils.createCSV("./"+ this.getClass().getName() + "/"+ this.userId+".csv", physicalInfoHeaders);
+		 FileUtils.insertCSV("./"+ this.getClass().getName() + "/"+ this.userId+".csv", selectList);
+		 
 	 }
 	 
 }
