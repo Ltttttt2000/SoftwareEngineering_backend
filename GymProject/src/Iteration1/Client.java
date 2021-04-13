@@ -16,6 +16,8 @@ public class Client extends User{
 	//getter, setter 
 	public void setRechargeAmount(int rechargeAmount) {
 		this.rechargeAmount = rechargeAmount;
+		this.userInfo[6] = String.valueOf(rechargeAmount);
+		
 	}
 	public int getRechargeAmount() {
 		return this.rechargeAmount;

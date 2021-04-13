@@ -18,9 +18,10 @@ public class User{
 	String userType; 
 	String sex;
 	String phoneNumber;
-	Boolean loginLicense;
+	Boolean loginLicense = true;
 	int rechargeAmount = 0;      //the total money in the account
 	String resume;  //for instructor
+	
 	
 	//需不需要new?
 	String[] fileHeaders = new String[10];
@@ -28,7 +29,7 @@ public class User{
 	//注意这里是List!!而FileUtils 里面返回的都是以String[] 为元素的list，读的是文件的行，每一行是一个String[]
 	ArrayList<String[]> userInfoList = new ArrayList<String[]>();
 	
-	String[] userInfo = new String[10];
+	String[] userInfo = new String[] {"None","None","None","None","None","None","None","None"};
 	
 	ArrayList<String[]> selectList = new ArrayList<String[]>();
 	String[] readAll = {"*"}; // 为了给readCSV传入一个读全部的 *
@@ -47,14 +48,18 @@ public class User{
 		fileHeaders[5] = "loginLicense";
 		fileHeaders[6] = "rechargeAmount";
 		fileHeaders[7] = "resume";
+	
+		if(this.getClass().getSimpleName() == "Instructor") {
+			fileHeaders[8] = "InstructorMoney";
+		}
+			
 		
-		
-		File check = new File("./"+ this.getClass().getName() + "/"+userid +".csv");
+		File check = new File("./"+ this.getClass().getSimpleName() + ".csv");
 		if(!check.exists()) {
-			FileUtils.createCSV("./"+ this.getClass().getName() + "/"+userid +".csv", fileHeaders);
+			FileUtils.createCSV("./"+ this.getClass().getSimpleName() + ".csv", fileHeaders);
 		}
 		else {
-			selectList = FileUtils.readCSV("./"+ this.getClass().getName() + "/"+userid+".csv", readAll);
+			selectList = FileUtils.readCSV("./"+ this.getClass().getSimpleName() + ".csv", readAll);
 			
 			this.password = selectList.get(0)[1];
 			userInfo[1] = this.password;
@@ -99,14 +104,20 @@ public class User{
 		 
 	 }
 	 
+	 void setResume(String resume) {
+		 this.resume = resume;
+		 userInfo[7] = this.resume; 
+	 }
+	 
+	 
 	 //新加method, 最后在GUI里改完所有再统一写回文件
 	 void renewUserInfo() {
 		 //删文件
-		 FileUtils.delete("./"+ this.getClass().getName() + "/"+ this.userid +".csv");
+		 FileUtils.delete("./"+ this.getClass().getSimpleName() + ".csv");
 		 userInfoList.add(userInfo);
 		 //重新建一个文件
-		 FileUtils.createCSV("./"+ this.getClass().getName() + "/"+ this.userid+".csv", fileHeaders);
-		 FileUtils.insertCSV("./"+ this.getClass().getName() + "/"+ this.userid+".csv", userInfoList);
+		 FileUtils.createCSV("./"+ this.getClass().getSimpleName() + ".csv", fileHeaders);
+		 FileUtils.insertCSV("./"+ this.getClass().getSimpleName() + ".csv", userInfoList);
 		 
 	 }
 	 

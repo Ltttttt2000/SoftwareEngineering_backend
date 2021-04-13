@@ -110,11 +110,11 @@ public class PhysicalInfo {
 	 
 	 void printUserPhisical() {
 		 System.out.println("age:"+ this.age +"\n"+
-				 			"height"+ this.age +"\n"+
-				 			"weight"+ this.age +"\n"+
-				 			"chest"+ this.age +"\n"+
-				 			"waist"+ this.age +"\n"+
-				 			"hip"+ this.age +"\n");
+				 			"height"+ this.height +"\n"+
+				 			"weight"+ this.weight +"\n"+
+				 			"chest"+ this.chest +"\n"+
+				 			"waist"+ this.waist +"\n"+
+				 			"hip"+ this.hip +"\n");
 	 }
 	 
 	 void renewUserPhysical() {
