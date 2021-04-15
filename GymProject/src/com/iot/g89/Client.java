@@ -1,13 +1,8 @@
-package Iteration1;
+package com.iot.g89;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-
 public class Client extends User{
-	
               // Normal, Member, SupremeMember
 	public Client(String userid) {
 		super(userid);
@@ -16,8 +11,7 @@ public class Client extends User{
 	//getter, setter 
 	public void setRechargeAmount(int rechargeAmount) {
 		this.rechargeAmount = rechargeAmount;
-		this.userInfo[6] = String.valueOf(rechargeAmount);
-		
+		this.userInfo[6] = String.valueOf(rechargeAmount);//�޸�csv�ĺ���
 	}
 	public int getRechargeAmount() {
 		return this.rechargeAmount;
@@ -33,8 +27,8 @@ public class Client extends User{
 		if(money < 0) {
 			System.out.println("error");
 		}else {
-			setRechargeAmount(this.rechargeAmount + money);
-			if(this.userType == "Normal") {
+			setRechargeAmount(this.rechargeAmount + money);    //change csv file in setter function
+			if(this.userType == "Normal") {                    // panduan ma hai???
 				if(money > 500)
 					this.accountUpgradeToMember();
 			}
@@ -71,6 +65,7 @@ public class Client extends User{
 	public void accountUpgradeToMember() {
 		if(this.userType == "Normal") {
 			this.userType = "Member";
+			//�޸�csv
 			FileUtils.delete("./user/"+ this.userid +".csv");
 			userInfoList.add(userInfo);
 			FileUtils.createCSV("./user/"+ this.userid+".csv", fileHeaders);
@@ -100,6 +95,7 @@ public class Client extends User{
 	 */
 	public ArrayList<Video> listPublicVideo(){
 		return new ArrayList<Video>();
+		//����videocsv
 	}
 	/**
 	 * This method is for every user to play a particular video.
@@ -107,7 +103,7 @@ public class Client extends User{
 	 * @param video
 	 * 			the video want to play
 	 */
-	public void playVideo(Video video) {
+	public void playVideo(Video video) { //��video��
 		
 	}
 
@@ -133,12 +129,11 @@ public class Client extends User{
 	 * 			all the Videos need to be paid
 	 */
 	public ArrayList<Video> listPaidVideo(){
-		if(this.userType == "Member") {
-			return new ArrayList<Video>();
-		}else {
-			System.out.println("Wrong clientType");
-			return null;
-		}
+		
+		ArrayList<Video> paidVideo = new ArrayList<Video>();
+		
+		return paidVideo;
+			
 	}
 	/**
 	 * This method is only for member client to list all purchased videos.
@@ -147,6 +142,9 @@ public class Client extends User{
 	 * 			all the Videos the client purchased
 	 */
 	public ArrayList<Video> listPurchasedVideo(){
+		//clientVideo.csv
+		//purchaseVideoListID, userid, videoid
+		//return videoid String[]
 		if(this.userType == "Member") {
 			return new ArrayList<Video>();
 		}else {
@@ -162,6 +160,7 @@ public class Client extends User{
 	 * 			all the Videos private
 	 */
 	public ArrayList<Video> listPrivateVideo(){
+		//AssignVideo.csv
 		if(this.userType == "SupremeMember") {
 			
 			return new ArrayList<Video>();
@@ -169,7 +168,6 @@ public class Client extends User{
 			System.out.println("wrong type");
 			return null;
 		}
-		
 	}
 
 	
@@ -198,12 +196,10 @@ public class Client extends User{
 	 * 			all the instructor
 	 */
 	public ArrayList<Instructor> listMyInstructor(){
-		if(this.userType == "SupremeMember") {
-			return new ArrayList<Instructor>();
-		}else {
-			System.out.println("wrong type");
-			return null;
-		}
+		//clientInstructor.csv
+		ArrayList<Instructor> myInstructor = new ArrayList<Instructor>();
+
+		return myInstructor;
 	}
 	
 	/**
@@ -213,11 +209,8 @@ public class Client extends User{
 	 * 			the instructor want to buy
 	 */
 	public void buyInstructor(Instructor instructor) {
-		if(this.userType == "SupremeMember") {
-	
-		}else {
-			System.out.println("wrong type");
-		}		
+		//instructor.instructor.money;
+		this.consume(1000);
 	}
 	
 	/**
@@ -227,48 +220,7 @@ public class Client extends User{
 	 * 			the instructor want to check
 	 */
 	public void checkInstructor(Instructor instructor) {
-		if(this.userType == "SupremeMember") {
-			String filePath = "";
-			String[] info = {"name","sex"};
-			FileUtils.readCSV(filePath, info);
-		}else {
-			System.out.println("wrong type");
-		}		
-	}
-	
-	
-	// return Client object from file
-	public Client deserialzeClient(String filename) {		 
-		Client client = null;
-		FileInputStream fileInputStream = null;
-		ObjectInputStream objectInputStream = null;
-
-		try {
- 
-			fileInputStream = new FileInputStream(filename);
-			objectInputStream = new ObjectInputStream(fileInputStream);
-			client = (Client) objectInputStream.readObject();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (fileInputStream != null) {
-				try {
-					fileInputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (objectInputStream != null) {
-				try {
-					objectInputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
- 
-		}
- 
-		return client;
+		
 	}
 	
 }

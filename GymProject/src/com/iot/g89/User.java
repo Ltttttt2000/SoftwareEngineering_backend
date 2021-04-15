@@ -1,4 +1,4 @@
-package Iteration1;
+package com.iot.g89;
 /**
  * 
  */
@@ -29,7 +29,7 @@ public class User{
 	//注意这里是List!!而FileUtils 里面返回的都是以String[] 为元素的list，读的是文件的行，每一行是一个String[]
 	ArrayList<String[]> userInfoList = new ArrayList<String[]>();
 	
-	String[] userInfo = new String[] {"None","None","None","None","None","None","None","None"};
+	String[] userInfo = new String[] {"0","0","0","0","0","0","0","0"};
 	
 	ArrayList<String[]> selectList = new ArrayList<String[]>();
 	String[] readAll = {"*"}; // 为了给readCSV传入一个读全部的 *

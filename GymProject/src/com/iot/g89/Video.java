@@ -1,4 +1,4 @@
-package Iteration1;
+package com.iot.g89;
 
 public class Video {
 	String videoId;

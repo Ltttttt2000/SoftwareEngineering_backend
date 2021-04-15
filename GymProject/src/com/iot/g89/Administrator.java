@@ -1,4 +1,4 @@
-package Iteration1;
+package com.iot.g89;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +16,8 @@ public class Administrator extends User{
 	 * 		All client objects in arraylist
 	 */
 	public ArrayList<Client> listAllClient(){
-		ArrayList<Client> allClient = new ArrayList<Client>();
+		ArrayList<Client> allClients = new ArrayList<Client>();
+		String fileName = "client.csv";
 		String path = "./clients/";      
 		File file = new File(path);		
 		File[] fs = file.listFiles();	
@@ -26,10 +27,10 @@ public class Administrator extends User{
 				ArrayList<String[]> thisUser = FileUtils.readCSV(f.getPath(), fileHeaders);
 				String userID = thisUser.get(0)[0]; //get the userid
 				Client aClient = new Client(userID);
-				allClient.add(aClient);
+				allClients.add(aClient);
 			}
 		}
-		return allClient;
+		return allClients;
 	}
 
 	/**
@@ -135,8 +136,10 @@ public class Administrator extends User{
 	 */
 	//´«µÝID»¹ÊÇobject??
 	public void deleteUser(User userDel) {
-		String typeOfUser = userDel.getClass().getName();
 		String userid = userDel.userid;
+		
+		String typeOfUser = userDel.getClass().getName();
+		
 		String path = "./" + typeOfUser + "/" + userid + "/csv";
 		File check = new File(path);
 		if(!check.exists()) {
