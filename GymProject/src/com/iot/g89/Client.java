@@ -11,7 +11,11 @@ public class Client extends User{
 	//getter, setter 
 	public void setRechargeAmount(int rechargeAmount) {
 		this.rechargeAmount = rechargeAmount;
-		this.userInfo[6] = String.valueOf(rechargeAmount);//�޸�csv�ĺ���
+		String filePath = "./Client.csv";
+		String[] attrs = {"rechargeAmount"};
+		String recharge = String.valueOf(this.rechargeAmount);
+		String[] modifyTo = {recharge};
+		FileUtils.updateCSV4(filePath, userid, attrs, modifyTo);
 	}
 	public int getRechargeAmount() {
 		return this.rechargeAmount;
@@ -27,8 +31,8 @@ public class Client extends User{
 		if(money < 0) {
 			System.out.println("error");
 		}else {
-			setRechargeAmount(this.rechargeAmount + money);    //change csv file in setter function
-			if(this.userType == "Normal") {                    // panduan ma hai???
+			setRechargeAmount(this.rechargeAmount + money);   
+			if(this.userType == "Normal") {                   
 				if(money > 500)
 					this.accountUpgradeToMember();
 			}
@@ -36,7 +40,6 @@ public class Client extends User{
 				if(money > 1000)
 					this.accountUpgradeToSupreme();
 			}
-			//change rechargeAmount in csv???
 		}
 	}
 	/**
@@ -45,18 +48,15 @@ public class Client extends User{
 	 * @param money
 	 * 			The money the user need to pay
 	 */
-	public void consume(int money) {
-		
+	public void consume(int money) {	
 		int balance = this.rechargeAmount - money;
 		if(balance < 0) {
 			System.out.println("Sorry, your credit is running low, please recharge.");
 			
 		}else {
-			setRechargeAmount(this.rechargeAmount - money);
-			// change in csv
+			setRechargeAmount(balance);
 			System.out.println("buy successfully");
 		}
-		
 	}
 	
 	/**
@@ -64,12 +64,7 @@ public class Client extends User{
 	 */	
 	public void accountUpgradeToMember() {
 		if(this.userType == "Normal") {
-			this.userType = "Member";
-			//�޸�csv
-			FileUtils.delete("./user/"+ this.userid +".csv");
-			userInfoList.add(userInfo);
-			FileUtils.createCSV("./user/"+ this.userid+".csv", fileHeaders);
-			FileUtils.insertCSV("./user/"+ this.userid+".csv", userInfoList);
+			setUserType("Member");
 		}else {
 			System.out.println("Wrong clientType");
 		}
@@ -80,9 +75,9 @@ public class Client extends User{
 	public void accountUpgradeToSupreme() {
 		if(this.userType == "Member") {
 			setUserType("SupreMember");
-			
+		}else {
+			System.out.println("Wrong clientType");
 		}
-		
 	}
 	
 	
@@ -94,32 +89,19 @@ public class Client extends User{
 	 * 			all the Videos
 	 */
 	public ArrayList<Video> listPublicVideo(){
-		return new ArrayList<Video>();
-		//����videocsv
-	}
-	/**
-	 * This method is for every user to play a particular video.
-	 * 
-	 * @param video
-	 * 			the video want to play
-	 */
-	public void playVideo(Video video) { //��video��
-		
-	}
+		ArrayList<Video> allPublicVideo = new ArrayList<Video>();
+		String filePath = "./videos.csv";
+		String[] idAndType = {"videoId","videoType"};
+		ArrayList<String[]> videoInfo = new ArrayList<String[]>();
+		videoInfo = FileUtils.readCSV(filePath, idAndType);
 
-	/**
-	 * This method is only for member client to buy a particular video.
-	 * 
-	 * @param videoBuy
-	 * 			the video want to buy
-	 */
-	public void buyVideo(Video VideoBuy) {
-		if(this.userType == "Member") {
-			int money = 100;      //check money from scv
-			consume(money);
-		}else {
-			System.out.println("Wrong clientType");
+		int i = 0;
+		while(videoInfo.get(i) != null && videoInfo.get(i)[1] == "public") {  //the second element is videoType = public
+			Video video = new Video(videoInfo.get(i)[0]);
+			allPublicVideo.add(video);	
+			i++;
 		}
+		return allPublicVideo;
 	}
 	
 	/**
@@ -129,12 +111,21 @@ public class Client extends User{
 	 * 			all the Videos need to be paid
 	 */
 	public ArrayList<Video> listPaidVideo(){
-		
-		ArrayList<Video> paidVideo = new ArrayList<Video>();
-		
-		return paidVideo;
-			
+		ArrayList<Video> allPaidVideo = new ArrayList<Video>();
+		String filePath = "./videos.csv";
+		String[] idAndType = {"videoId","videoType"};
+		ArrayList<String[]> videoInfo = new ArrayList<String[]>();
+		videoInfo = FileUtils.readCSV(filePath, idAndType);
+
+		int i = 0;
+		while(videoInfo.get(i) != null && videoInfo.get(i)[1] == "paid") {  //the second element is videoType = public
+			Video video = new Video(videoInfo.get(i)[0]);
+			allPaidVideo.add(video);	
+			i++;
+		}
+		return allPaidVideo;
 	}
+	
 	/**
 	 * This method is only for member client to list all purchased videos.
 	 * 
@@ -142,15 +133,19 @@ public class Client extends User{
 	 * 			all the Videos the client purchased
 	 */
 	public ArrayList<Video> listPurchasedVideo(){
-		//clientVideo.csv
-		//purchaseVideoListID, userid, videoid
-		//return videoid String[]
-		if(this.userType == "Member") {
-			return new ArrayList<Video>();
-		}else {
-			System.out.println("Wrong clientType");
-			return null;
+		ArrayList<Video> purcharedVideo = new ArrayList<Video>();
+		String filePath = "./clientVideo.csv";
+		String[] info = {"*"};
+		ArrayList<String[]> videoInfo = new ArrayList<String[]>();
+		videoInfo = FileUtils.readCSV(filePath, info);
+
+		int i = 0;
+		while(videoInfo.get(i) != null && videoInfo.get(i)[1] == this.userid) {  //the second element is userid
+			Video video = new Video(videoInfo.get(i)[2]);   //videoid
+			purcharedVideo.add(video);	
+			i++;
 		}
+		return purcharedVideo;
 		
 	}
 	/**
@@ -160,15 +155,65 @@ public class Client extends User{
 	 * 			all the Videos private
 	 */
 	public ArrayList<Video> listPrivateVideo(){
-		//AssignVideo.csv
-		if(this.userType == "SupremeMember") {
-			
-			return new ArrayList<Video>();
+		ArrayList<Video> privateVideo = new ArrayList<Video>();
+		String filePath = "./AssignVideo.csv";
+		String[] info = {"*"};
+		ArrayList<String[]> videoInfo = new ArrayList<String[]>();
+		videoInfo = FileUtils.readCSV(filePath, info);
+
+		int i = 0;
+		while(videoInfo.get(i) != null && videoInfo.get(i)[1] == this.userid) {  //the second element is client's userid
+			Video video = new Video(videoInfo.get(i)[3]);   //videoid
+			privateVideo.add(video);	
+			i++;
+		}
+		return privateVideo;
+	}
+
+	/**
+	 * This method is for every user to play a particular video.
+	 * 
+	 * @param video
+	 * 			the video want to play
+	 */
+	public void playVideo(Video video) { 
+		//the function in video class
+	}
+
+	/**
+	 * This method is only for member client and SupremeMember client to buy a particular video.
+	 * 
+	 * @param videoBuy
+	 * 			the video want to buy
+	 */
+	public void buyVideo(Video VideoBuy) {
+		if(this.userType == "Normal") {
+			System.out.println("Wrong clientType");
 		}else {
-			System.out.println("wrong type");
-			return null;
+			int money = VideoBuy.price;     
+			consume(money);
+			
+			String filePath = "./clientVideo.csv";	
+			String[] attrs = {"*"};
+			//identify purchasedId
+			ArrayList<String[]> info = new ArrayList<String[]>();
+			info = FileUtils.readCSV(filePath, attrs);
+			int i = 0;
+			String purchasedid = null;
+			while(info.get(i) != null) {  //the second element is client's userid
+				purchasedid = info.get(i)[0];
+				i++;
+			}
+			int id = Integer.parseInt(purchasedid) + 1;
+			String newPurchasedId = String.valueOf(id);
+			ArrayList<String[]> csvList = new ArrayList<String[]>();
+			String[] addInfo = {newPurchasedId,userid,VideoBuy.videoId};
+			csvList.add(addInfo);
+			FileUtils.insertCSV(filePath, csvList);
 		}
 	}
+	
+
 
 	
 	//related to instructor
@@ -180,13 +225,20 @@ public class Client extends User{
 	 * 			all the instructor
 	 */
 	public ArrayList<Instructor> listAllInstructor(){
-		if(this.userType == "SupremeMember") {
-			
-			return new ArrayList<Instructor>();
-		}else {
-			System.out.println("You can not see all instructors");
-			return null;
+		ArrayList<Instructor> allInstructor = new ArrayList<Instructor>();
+		String filePath = "./Instructor.csv";
+		String[] attributes = {"userid"};
+		
+		ArrayList<String[]> instructorsInfo = new ArrayList<String[]>();
+		instructorsInfo = FileUtils.readCSV(filePath, attributes);
+		int i = 0;
+		while(instructorsInfo.get(i) != null) {
+			Instructor instructor = new Instructor(instructorsInfo.get(i)[0]);
+			allInstructor.add(instructor);		
+			i++;
 		}
+		
+		return allInstructor;
 	}
 	
 	/**
@@ -196,9 +248,18 @@ public class Client extends User{
 	 * 			all the instructor
 	 */
 	public ArrayList<Instructor> listMyInstructor(){
-		//clientInstructor.csv
 		ArrayList<Instructor> myInstructor = new ArrayList<Instructor>();
+		String filePath = "./clientInstructor.csv";
+		String[] attrs = {"*"};
+		ArrayList<String[]> info = new ArrayList<String[]>();
+		info = FileUtils.readCSV(filePath, attrs);
 
+		int i = 0;
+		while(info.get(i) != null && info.get(i)[1] == this.userid) {  //the second element is userid
+			Instructor instructor = new Instructor(info.get(i)[2]);  //instructorid
+			myInstructor.add(instructor);	
+			i++;
+		}
 		return myInstructor;
 	}
 	
@@ -209,8 +270,30 @@ public class Client extends User{
 	 * 			the instructor want to buy
 	 */
 	public void buyInstructor(Instructor instructor) {
-		//instructor.instructor.money;
-		this.consume(1000);
+		if(this.userType == "SupremeMember") {
+			int money = instructor.instructorMoney;     
+			consume(money);
+			
+			String filePath = "./clientInstructor.csv";	
+			String[] attrs = {"*"};
+			//identify purchasedId
+			ArrayList<String[]> info = new ArrayList<String[]>();
+			info = FileUtils.readCSV(filePath, attrs);
+			int i = 0;
+			String purchasedid = null;
+			while(info.get(i) != null) {  //the second element is client's userid
+				purchasedid = info.get(i)[0];
+				i++;
+			}
+			int id = Integer.parseInt(purchasedid) + 1;
+			String newPurchasedId = String.valueOf(id);
+			ArrayList<String[]> csvList = new ArrayList<String[]>();
+			String[] addInfo = {newPurchasedId,this.userid,instructor.userid};
+			csvList.add(addInfo);
+			FileUtils.insertCSV(filePath, csvList);			
+		}else {
+			System.out.println("Wrong clientType");
+		}
 	}
 	
 	/**
@@ -220,7 +303,18 @@ public class Client extends User{
 	 * 			the instructor want to check
 	 */
 	public void checkInstructor(Instructor instructor) {
-		
+		String userid = instructor.userid;
+		String filePath = "./Instructor.csv";
+		ArrayList<String[]> instructorsInfo = new ArrayList<String[]>();
+		instructorsInfo = FileUtils.readCSV(filePath, fileHeaders);
+		int i = 0;
+		while(instructorsInfo.get(i) != null) {  //the second element is client's userid
+			if(instructorsInfo.get(i)[0] == userid) {
+				//display function
+			}
+			i++;
+		}
+		//System.out.println(instructorsInfo);
 	}
 	
 }
