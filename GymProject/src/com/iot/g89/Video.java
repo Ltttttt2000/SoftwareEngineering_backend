@@ -4,11 +4,11 @@ public class Video {
 	String videoId;
 	String videoType;
 	String detial;
-	String price;
+	int price;
 	Instructor author;
 	Client specificClient;
 	
-    public Video() {
+    public Video(String videoId) {
     	
     }
 
@@ -27,7 +27,7 @@ public class Video {
 	
 	 }
 	 
-	 String getPrice() {
+	 int getPrice() {
 		return price;
 		 
 	 }
