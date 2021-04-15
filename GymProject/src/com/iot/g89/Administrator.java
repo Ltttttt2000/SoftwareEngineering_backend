@@ -1,35 +1,33 @@
 package com.iot.g89;
 
-import java.io.File;
 import java.util.ArrayList;
-
 
 public class Administrator extends User{
 	
 	public Administrator(String userid) {
 		super(userid);
 	}
+	
 	/**
 	 * List all the clients information.
 	 * 
 	 * @return 
-	 * 		All client objects in arraylist
+	 * 		All client objects in Arraylist
 	 */
 	public ArrayList<Client> listAllClient(){
 		ArrayList<Client> allClients = new ArrayList<Client>();
-		String fileName = "client.csv";
-		String path = "./clients/";      
-		File file = new File(path);		
-		File[] fs = file.listFiles();	
-		for(File f:fs){					
-			if(!f.isDirectory()) {
-				//String[] fileHeaders = {"userid"};
-				ArrayList<String[]> thisUser = FileUtils.readCSV(f.getPath(), fileHeaders);
-				String userID = thisUser.get(0)[0]; //get the userid
-				Client aClient = new Client(userID);
-				allClients.add(aClient);
-			}
+		String filePath = "./Client.csv";
+		String[] attributes = {"userid"};
+		
+		ArrayList<String[]> clientsInfo = new ArrayList<String[]>();
+		clientsInfo = FileUtils.readCSV(filePath, attributes);
+		int i = 0;
+		while(clientsInfo.get(i) != null) {
+			Client client = new Client(clientsInfo.get(i)[0]);    //get userid, build Client
+			allClients.add(client);		
+			i++;
 		}
+		
 		return allClients;
 	}
 
@@ -41,18 +39,18 @@ public class Administrator extends User{
 	 */
 	public ArrayList<Instructor> listAllInstructor(){
 		ArrayList<Instructor> allInstructor = new ArrayList<Instructor>();
-		String path = "./instructors/";      
-		File file = new File(path);		
-		File[] fs = file.listFiles();	
-		for(File f:fs){					
-			if(!f.isDirectory()) {
-				//String[] fileHeaders = {"userid"};
-				ArrayList<String[]> thisInstructor = FileUtils.readCSV(f.getPath(), fileHeaders);
-				String userID = thisInstructor.get(0)[0]; //get the userid
-				Instructor aInstructor = new Instructor(userID);
-				allInstructor.add(aInstructor);
-			}
+		String filePath = "./Instructor.csv";
+		String[] attributes = {"userid"};
+		
+		ArrayList<String[]> instructorsInfo = new ArrayList<String[]>();
+		instructorsInfo = FileUtils.readCSV(filePath, attributes);
+		int i = 0;
+		while(instructorsInfo.get(i) != null) {
+			Instructor instructor = new Instructor(instructorsInfo.get(i)[0]);
+			allInstructor.add(instructor);		
+			i++;
 		}
+		
 		return allInstructor;
 	}
 	
@@ -64,45 +62,38 @@ public class Administrator extends User{
 	 */
 	public ArrayList<User> listAllUser(){
 		ArrayList<User> allUser = new ArrayList<User>();
-		String clientPath = "./clients/";
-		String instructorPath = "./instructors/";
-		String administratorPath = "./administrators/";
-		
-		File fileClient = new File(clientPath);		
-		File[] fs = fileClient.listFiles();	
-		for(File f:fs){					
-			if(!f.isDirectory()) {
-				//String[] fileHeaders = {"userid"};
-				ArrayList<String[]> thisUser = FileUtils.readCSV(f.getPath(), fileHeaders);
-				String userID = thisUser.get(0)[0]; //get the userid
-				Client aClient = new Client(userID);
-				allUser.add(aClient);
-			}
+		String[] usersID = {"userid"};
+		//all Clients
+		String clientPath = "./Client.csv";
+		ArrayList<String[]> clientsInfo = new ArrayList<String[]>();
+		clientsInfo = FileUtils.readCSV(clientPath, usersID);
+		int i = 0;
+		while(clientsInfo.get(i) != null) {
+			Client client = new Client(clientsInfo.get(i)[0]);
+			allUser.add(client);	
+			i++;
 		}
 		
-		File fileInstructor = new File(instructorPath);		
-		File[] fs1 = fileInstructor.listFiles();	
-		for(File f:fs1){					
-			if(!f.isDirectory()) {
-				//String[] fileHeaders = {"userid"};
-				ArrayList<String[]> thisUser = FileUtils.readCSV(f.getPath(), fileHeaders);
-				String userID = thisUser.get(0)[0]; //get the userid
-				Instructor aInstructor = new Instructor(userID);
-				allUser.add(aInstructor);
-			}
+		String instruPath = "./Instructor.csv";
+		ArrayList<String[]> instructorsInfo = new ArrayList<String[]>();
+		instructorsInfo = FileUtils.readCSV(instruPath, usersID);
+		int j = 0;
+		while(instructorsInfo.get(j) != null) {
+			Instructor instructor = new Instructor(instructorsInfo.get(i)[0]);
+			allUser.add(instructor);	
+			j++;
 		}
 		
-		File fileAdmini = new File(administratorPath);		
-		File[] fs2 = fileAdmini.listFiles();	
-		for(File f:fs2){					
-			if(!f.isDirectory()) {
-				//String[] fileHeaders = {"userid"};
-				ArrayList<String[]> thisUser = FileUtils.readCSV(f.getPath(), fileHeaders);
-				String userID = thisUser.get(0)[0]; //get the userid
-				Administrator aAdmini = new Administrator(userID);
-				allUser.add(aAdmini);
-			}
+		String adminPath = "./Administrator.csv";
+		ArrayList<String[]> adminInfo = new ArrayList<String[]>();
+		adminInfo = FileUtils.readCSV(adminPath, usersID);
+		int k = 0;
+		while(adminInfo.get(k) != null) {
+			Administrator admin = new Administrator(adminInfo.get(i)[0]);
+			allUser.add(admin);	
+			k++;
 		}
+		
 		return allUser;
 	}
 	
@@ -114,17 +105,16 @@ public class Administrator extends User{
 	 */
 	public ArrayList<Video> listAllVideo(){
 		ArrayList<Video> allVideo = new ArrayList<Video>();
-		String path = "./videoCSVs/";      
-		File file = new File(path);		
-		File[] fs = file.listFiles();	
-		for(File f:fs){					
-			if(!f.isDirectory()) {
-				String[] videoHeaders = {"videoid"};
-				ArrayList<String[]> thisVideo = FileUtils.readCSV(f.getPath(), videoHeaders);
-				String videoID = thisVideo.get(0)[0]; 
-				Video aVideo = new Video(videoID);
-				allVideo.add(aVideo);
-			}
+		String filePath = "./videos.csv";
+		String[] videoid = {"videoId"};
+		ArrayList<String[]> videoInfo = new ArrayList<String[]>();
+		videoInfo = FileUtils.readCSV(filePath, videoid);
+
+		int i = 0;
+		while(videoInfo.get(i) != null) {
+			Video video = new Video(videoInfo.get(i)[0]);
+			allVideo.add(video);	
+			i++;
 		}
 		return allVideo;
 	}
@@ -134,20 +124,11 @@ public class Administrator extends User{
 	 * @param userDel
 	 * 		The user need to be deleted.
 	 */
-	//´«µÝID»¹ÊÇobject??
 	public void deleteUser(User userDel) {
 		String userid = userDel.userid;
-		
-		String typeOfUser = userDel.getClass().getName();
-		
-		String path = "./" + typeOfUser + "/" + userid + "/csv";
-		File check = new File(path);
-		if(!check.exists()) {
-			System.out.println("Operation fail! The user didn't exist!");
-		}
-		else {
-			FileUtils.delete(userid+".csv");
-		}
+		String typeOfUser = userDel.getClass().getSimpleName();
+		String path = "./" + typeOfUser + ".csv";
+		FileUtils.deleteCSV(userid, path);
 	}
 	
 	/**
@@ -165,14 +146,8 @@ public class Administrator extends User{
 	 * 		The video need to be deleted.
 	 */
 	public void deleteVideo(Video videoDel) {
-		String deletedVideoID = videoDel.videoid;
-		File check = new File("./video/"+ deletedVideoID +".csv");
-		if(!check.exists()) {
-			System.out.println("The video didn't exist!");
-		}
-		else {
-			FileUtils.delete(deletedVideoID + ".csv");
-			FileUtils.delete(deletedVideoID + ".mp4");    //???
-		}
+		String videoid = videoDel.videoId;
+		String path = "./videos.csv";
+		FileUtils.deleteCSV(videoid, path);
 	}
 }
