@@ -147,7 +147,10 @@ public class Administrator extends User{
 	 */
 	public void deleteVideo(Video videoDel) {
 		String videoid = videoDel.videoId;
-		String path = "./videos.csv";
+		//delete from videoSCV
+		String path = "./videoCSVs.csv";
 		FileUtils.deleteCSV(videoid, path);
+		//delete video
+		FileUtils.delete(videoid+".mp4");
 	}
 }
