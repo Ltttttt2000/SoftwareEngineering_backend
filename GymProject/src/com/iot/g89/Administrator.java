@@ -22,12 +22,13 @@ public class Administrator extends User{
 		ArrayList<String[]> clientsInfo = new ArrayList<String[]>();
 		clientsInfo = FileUtils.readCSV(filePath, attributes);
 		int i = 0;
-		while(clientsInfo.get(i) != null) {
+		
+		while(i < clientsInfo.size()) {
 			Client client = new Client(clientsInfo.get(i)[0]);    //get userid, build Client
 			allClients.add(client);		
 			i++;
 		}
-		
+		System.out.println(allClients);
 		return allClients;
 	}
 
@@ -45,12 +46,12 @@ public class Administrator extends User{
 		ArrayList<String[]> instructorsInfo = new ArrayList<String[]>();
 		instructorsInfo = FileUtils.readCSV(filePath, attributes);
 		int i = 0;
-		while(instructorsInfo.get(i) != null) {
+		while(i < instructorsInfo.size()) {
 			Instructor instructor = new Instructor(instructorsInfo.get(i)[0]);
 			allInstructor.add(instructor);		
 			i++;
 		}
-		
+		System.out.println(allInstructor);
 		return allInstructor;
 	}
 	
@@ -63,12 +64,23 @@ public class Administrator extends User{
 	public ArrayList<User> listAllUser(){
 		ArrayList<User> allUser = new ArrayList<User>();
 		String[] usersID = {"userid"};
+		//all admin
+		String adminPath = "./Administrator.csv";
+		ArrayList<String[]> adminInfo = new ArrayList<String[]>();
+		adminInfo = FileUtils.readCSV(adminPath, usersID);
+		int k = 0;
+		for(k=0;k<adminInfo.size();k++) {
+			while(k < adminInfo.size()) {
+				Administrator admin = new Administrator(adminInfo.get(k)[0]);
+				allUser.add(admin);	
+			}
+		}
 		//all Clients
 		String clientPath = "./Client.csv";
 		ArrayList<String[]> clientsInfo = new ArrayList<String[]>();
 		clientsInfo = FileUtils.readCSV(clientPath, usersID);
 		int i = 0;
-		while(clientsInfo.get(i) != null) {
+		while(i < clientsInfo.size()) {
 			Client client = new Client(clientsInfo.get(i)[0]);
 			allUser.add(client);	
 			i++;
@@ -78,22 +90,13 @@ public class Administrator extends User{
 		ArrayList<String[]> instructorsInfo = new ArrayList<String[]>();
 		instructorsInfo = FileUtils.readCSV(instruPath, usersID);
 		int j = 0;
-		while(instructorsInfo.get(j) != null) {
-			Instructor instructor = new Instructor(instructorsInfo.get(i)[0]);
+		for(j=0;j<instructorsInfo.size();j++) {
+			Instructor instructor = new Instructor(instructorsInfo.get(j)[0]);
 			allUser.add(instructor);	
-			j++;
 		}
 		
-		String adminPath = "./Administrator.csv";
-		ArrayList<String[]> adminInfo = new ArrayList<String[]>();
-		adminInfo = FileUtils.readCSV(adminPath, usersID);
-		int k = 0;
-		while(adminInfo.get(k) != null) {
-			Administrator admin = new Administrator(adminInfo.get(i)[0]);
-			allUser.add(admin);	
-			k++;
-		}
-		
+
+		System.out.println(allUser);
 		return allUser;
 	}
 	
@@ -105,17 +108,18 @@ public class Administrator extends User{
 	 */
 	public ArrayList<Video> listAllVideo(){
 		ArrayList<Video> allVideo = new ArrayList<Video>();
-		String filePath = "./videos.csv";
+		String filePath = "./videoCSVs.csv";
 		String[] videoid = {"videoId"};
 		ArrayList<String[]> videoInfo = new ArrayList<String[]>();
 		videoInfo = FileUtils.readCSV(filePath, videoid);
 
 		int i = 0;
-		while(videoInfo.get(i) != null) {
+		while(i < videoInfo.size()) {
 			Video video = new Video(videoInfo.get(i)[0]);
 			allVideo.add(video);	
 			i++;
 		}
+		System.out.println(allVideo);
 		return allVideo;
 	}
 	

@@ -98,7 +98,7 @@ public class User{
 			
 			//find the entry of this user in the file
 			if (selectList.size() == 0) {
-				System.out.println("File is empty!");
+				//System.out.println("File is empty!");
 			}
 			else {
 				
